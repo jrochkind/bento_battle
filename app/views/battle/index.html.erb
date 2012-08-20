@@ -1,0 +1,88 @@
+
+  <% if flash[:submitted] %>
+    <div class="row thanks">
+      <div class='span12 alert alert-success'>
+        <p><strong>Thanks for your help.</strong> Do another search and choice if you like!</p>
+      </div>
+    </div>    
+  <% end %>
+
+<div class="row">  
+  <div class="span12">
+    <div class="page-header">
+      <h1>Help us evaluate article search products
+        <small>by searching for a topic, an article, or anything.</small>
+      </h1>
+    </div>
+  </div>    
+</div>
+
+<div class="row">
+  <div class="span12">
+    <%= form_tag({}, :method => :get, :class => "form-search") do %>
+    
+      <%= search_field_tag 'q', params[:q], :class => "search-query span6" %>
+      <%= button_tag 'search', :type => 'submit', :class => "btn btn-primary" %>
+      <p class="tip"><small>Tip: Enter phrases in "quotation marks" for phrase search.</small></p>
+    <% end %>
+  </div>
+</div>
+<% if @results %>
+
+<%= form_tag(choice_path, :method => :post, :class => "form-choice") do %> 
+  <%= hidden_field_tag "q", params[:q] %>
+  
+  <%= hidden_field_tag 'query', params[:q] %>
+  
+  <%= hidden_field_tag 'option_a', @one %>
+  <%= hidden_field_tag 'option_b', @two %>
+  
+  <%= hidden_field_tag "timing_a", @results[@one].timing %>
+  <%= hidden_field_tag "timing_b", @results[@two].timing %>
+
+  <div class="row">
+    <div class="span12">
+    <div class="choice-header">
+        <h2>Which set of results do you prefer <small>as most useful or helpful . </small></h2>
+    </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="span12 demographics">
+      <em>Optional, let us know your:  </em>
+      School/Institution: <%= select_tag("school", options_for_select($schools, session[:school_choice])) %> 
+      Status:             <%= select_tag("status", options_for_select($statuses, session[:status_choice])) %>
+    </div>
+  </div>
+  
+  <div class="row">    
+    <div class="span4 battle-option">
+      <%= submit_tag 'Prefer A', :class => 'btn btn-large btn-info', :name => "preferA"%>
+    </div>
+    <div class="span4 battle-option">
+      <%= submit_tag "Can't Decide/About the Same", :class => 'btn btn-large btn-info', :name => "preferNone" %>
+    </div>
+    <div class="span4 battle-option">
+      <%= submit_tag 'Prefer B', :class => "btn btn-large btn-info", :name => "preferB" %>      
+    </div>
+  </div>
+<% end %>
+ 
+<div class="row">
+  <div class="span6">
+    <div class="well listA">
+      <%= bento_search @results[@one] %>
+    </div>
+  </div>
+  
+  <div class="span6">
+    <div class="well listB">
+      <%= bento_search @results[@two] %>
+    </div>
+  </div>
+
+</div>
+
+
+<% end %>

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  engine: MyString
+  backtrace: MyText
+  error_info: MyText
+
+two:
+  engine: MyString
+  backtrace: MyText
+  error_info: MyText
