@@ -3,7 +3,7 @@ BentoBattle::Application.routes.draw do
   
   match 'choice' => 'battle#choice', :via => "post", :as => :choice
   
-  
+  match "results" => "report#index"
   
   #get ":trial", "battle#index"
 

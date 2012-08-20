@@ -1,0 +1,25 @@
+<h1> Results </h1>
+
+<h2>Overall</h2>
+<table class="table table-striped">
+  <tr>
+    <th>engine</th>
+    <th>total selections</th>
+    <th>wins</th>
+    <th>losses</th>
+    <th>ties</th>
+    <th>Victory rate <small>disregards ties: wins / (wins + losses)</small></th>
+  </tr>
+
+<% @results.each do |row| %>
+  <tr>
+    <td><%= row["engine"] %> </td>
+    <td><%= row["total_selections"] %></td>
+    <td><%= row["wins"] %> </td>
+    <td><%= row["losses"] %> </td>
+    <td><%= row["ties"] %> </td>
+    <td> <%= number_to_percentage( 100 * row["wins"].to_f / ( row["wins"] + row["losses"] ), :precision => 1 )%> </td>
+  </tr>
+<% end %>
+
+</table>

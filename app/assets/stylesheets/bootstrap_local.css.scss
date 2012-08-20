@@ -30,3 +30,10 @@
   margin-bottom: 1em;
 }
 
+
+/* make small work inside th */
+th small {
+  font-weight: normal;
+  color: #999;
+  font-size: 80%;
+}
