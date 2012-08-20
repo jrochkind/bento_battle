@@ -6,19 +6,6 @@ require 'bento_search/openurl_main_link'
 # services
 $battle_engines = %w{primo eds ebscohost summon scopus}
 
-
-# Note all the relevant auth details for each service 
-# are taken from env variables, and will blank for you. 
-# Set them to your own auth credentials, or don't use the engine. 
-
-# Note also we've provided decorators to our own OpenURL link resolver,
-# you probably want to change to yours, or remove the decorators. 
-
-BentoSearch.register_engine("gbs") do |conf|
-   conf.engine = "BentoSearch::GoogleBooksEngine"
-   conf.api_key = ENV["GBS_API_KEY"]      
-end
-
 BentoSearch.register_engine("scopus") do |conf|
   conf.engine = "BentoSearch::ScopusEngine"
   conf.api_key = ENV["SCOPUS_KEY"]
@@ -30,10 +17,11 @@ BentoSearch.register_engine("scopus") do |conf|
 end
 
 BentoSearch.register_engine("summon") do |conf|
-  conf.engine = "BentoSearch::SummonEngine"
-  conf.access_id = ENV["SUMMON_ACCESS_ID"]
+  conf.engine     = "BentoSearch::SummonEngine"
+  conf.access_id  = ENV["SUMMON_ACCESS_ID"]
   conf.secret_key = ENV["SUMMON_SECRET_KEY"]
   
+  conf.lang       = "en"
   
 
   conf.fixed_params = {
@@ -100,20 +88,23 @@ BentoSearch.register_engine("eds") do |conf|
     BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
     BentoSearch::OpenurlAddOtherLink[:overwrite => true, :base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
   ]    
+  
+  # http://support.ebsco.com/knowledge_base/detail.php?id=5382
+  conf.only_source_types = [
+    "Academic Journals",
+    "Magazines",
+    "Reviews",
+    "Reports",
+    "Conference Materials",
+    "Dissertations",
+    "Biographies",
+    "Primary Source Documents",
+    "Music Scores"    
+  ]
 end
 
 
-# JH only, hacky demo of Xerxes/Metalib, does not work well, and
-# please don't point at our Xerxes install. 
-BentoSearch.register_engine("jhsearch") do |conf|
-  conf.engine = "BentoSearch::XerxesEngine"
-  conf.base_url = "http://jhsearch.library.jhu.edu"
-  conf.databases = ['JHU04066', 'JHU06614']
-  
-  conf.allow_routable_results = true
-  
-  conf.ajax_load = true
-end
+
 
 BentoSearch.register_engine("primo") do |conf|
   conf.engine       = "BentoSearch::PrimoEngine"
@@ -128,7 +119,7 @@ BentoSearch.register_engine("primo") do |conf|
   # exclude certain content-types. unclear if we should use
   # rtype or pfilter facet. 
   conf.fixed_params = {
-    "query_exc" => "facet_pfilter,exact,books,newspaper_articles,websites,reference_entrys,images,media,audio_video"
+    "query_exc" => "facet_pfilter,exact,books,newspaper_articles,websites,reference_entrys,images,media,audio_video,rare_books,book_chapters"
   }
   
   conf.item_decorators = [ 
