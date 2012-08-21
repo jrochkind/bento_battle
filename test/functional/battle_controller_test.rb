@@ -2,11 +2,15 @@ require 'test_helper'
 
 class BattleControllerTest < ActionController::TestCase
   def setup
+    @timing_aa = 1.5
     BentoSearch.register_engine("AA") do |conf|
       conf.engine = "BentoSearch::MockEngine"
+      conf.timing = @timing_aa
     end
+    @timing_bb = 2.5
     BentoSearch.register_engine("BB") do |conf|
       conf.engine = "BentoSearch::MockEngine"
+      conf.timing = @timing_bb
     end
     BentoSearch.register_engine("CC") do |conf|
       conf.engine = "BentoSearch::MockEngine"
@@ -171,20 +175,23 @@ class BattleControllerTest < ActionController::TestCase
   end
   
   test "should save timing info" do
+    BattleController.contenders = ["AA", "BB"]
+
+    
     assert_difference("Timing.count", 2) do
-      post :choice, example_post_params
+      post :index, :q => "Cancer"
     end      
     
     last_two = Timing.last(2)
     
+    assert( last_two.find do |t|        
+        t.engine == "AA"
+        t.miliseconds  == (@timing_aa * 1000).to_i
+      end, "timing_a recorded")
     assert( last_two.find do |t| 
-      t.engine == example_post_params[:option_a] && 
-        t.miliseconds == example_post_params[:timing_a]
-    end, "timing_a recorded")
-    assert( last_two.find do |t| 
-      t.engine == example_post_params[:option_b] &&
-      t.miliseconds == example_post_params[:timing_b]
-    end, "timing_b recorded")
+      t.engine == "BB"
+      t.miliseconds == (@timing_bb * 1000).to_i
+      end, "timing_b recorded")    
   end
   
     

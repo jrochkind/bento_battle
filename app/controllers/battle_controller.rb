@@ -28,6 +28,10 @@ class BattleController < ApplicationController
         if @results[engine].failed?
           handle_failed_results(choice)
         end
+      end 
+      
+      @results.each_pair do |engine, results|
+        Timing.create(:engine => engine, :miliseconds => results.timing_ms)
       end            
     end  
   rescue OutOfEngines
@@ -61,9 +65,6 @@ class BattleController < ApplicationController
     session[:status_choice] = selection.demographic_status  = params[:status]
 
     selection.save!
-
-    Timing.create(:engine => params[:option_a], :miliseconds => params[:timing_a])
-    Timing.create(:engine => params[:option_b], :miliseconds => params[:timing_b])
     
     redirect_to root_path, :flash => {:submitted => true}
   end
@@ -79,8 +80,7 @@ class BattleController < ApplicationController
   def validate_choice
     unless (params[:option_a].present? && params[:option_b].present? &&
       params[:query].present? &&
-      (params['preferB'].present? || params['preferA'].present? || params['preferNone'].present?)  &&
-      params[:timing_a].present? && params[:timing_b].present?)
+      (params['preferB'].present? || params['preferA'].present? || params['preferNone'].present?) )
     
       render :status => 500, :text => "ERROR: missing input. Something is wrong, your choice was not recorded."
     
