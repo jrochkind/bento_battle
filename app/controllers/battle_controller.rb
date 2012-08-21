@@ -106,6 +106,11 @@ class BattleController < ApplicationController
     new_results = BentoSearch.get_engine(new_engine).search(params[:q])
     
     @results[new_engine] = new_results    
+    
+    # if it's still failed, do it again!
+    if new_results.failed?
+      handle_failed_results(choice)
+    end    
   end
   
 end

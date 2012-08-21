@@ -88,6 +88,39 @@ class BattleControllerTest < ActionController::TestCase
     
   end
   
+  test "should recover from multiple errors when searching" do
+    BentoSearch.register_engine("error") do |conf|
+      conf.engine = "BentoSearch::MockEngine"
+      conf.error = {:message => "Fake error"}
+    end
+    BentoSearch.register_engine("error2") do |conf|
+      conf.engine = "BentoSearch::MockEngine"
+      conf.error = {:message => "Fake error"}
+    end
+    BattleController.contenders = ["AA", "BB", "error2", "error", "CC"]
+    
+    # Fake it into 'randomly' picking error in it's first two please
+    @controller.extend( Module.new do      
+      # chooses from the end, so put error at the end
+      def choices
+        @choices ||= ["AA", "BB", "error2", "error", "CC"]
+      end
+    end)
+    
+    assert_difference("Error.count", 2) do
+      get :index, :q => "Cancer"
+    end
+    
+    assert_response :success  
+    
+    assert_equal "CC", assigns["one"]
+    assert_equal "BB", assigns["two"]
+    
+    # and neither are errors
+    assert ! assigns["results"].values.find {|r| r.failed?}
+    
+  end
+  
   test "choice" do
     option_a = ["a", "b", "c"].sample
     option_b = ["1", "2", "3"].sample    
