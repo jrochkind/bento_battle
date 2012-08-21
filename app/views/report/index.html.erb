@@ -4,7 +4,7 @@
 <table class="table table-striped">
   <tr>
     <th>engine</th>
-    <th>total selections</th>
+    <th>total times participating</th>
     <th>wins</th>
     <th>losses</th>
     <th>ties</th>
@@ -22,4 +22,50 @@
   </tr>
 <% end %>
 
+</table>
+
+<h2> Match-up count sanity check </h2>
+<table class="table table-striped">
+  <tr>
+    <th>vs.</th>
+    <% @match_up_keys.each do |engine| %>
+    <th><%= engine %> </th>
+    <% end %>
+  <tr>
+  
+  
+  <% @match_up_keys.each do |engine| %>
+    <tr>
+      <th><%= engine %> </th>
+        <% @match_up_keys.each do |second_engine| %>                      
+          <td>
+            <% if engine == second_engine %>
+              *
+            <% else %>
+              <%= @match_up_count[engine][second_engine] %>
+            <% end %>
+          </td>
+        <% end %>
+    </tr>
+  <% end %>
+  
+  
+  
+</table>
+
+
+<h2>Participants demographic overview</h2>
+<table class="table table-striped">
+  <tr>
+    <th>School</th><th>Status</th><th>count</th>
+  <tr>
+  
+  <% @demographic_overview.each do |row| %>
+    <tr>
+      <td><%= row["demographic_school"] %></td>
+      <td><%= row["demographic_status"] %></td>
+      <td><%= row["count"] %></td>
+    </tr>
+  <% end %>
+  
 </table>
