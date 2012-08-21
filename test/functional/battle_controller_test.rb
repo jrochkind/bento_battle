@@ -43,6 +43,13 @@ class BattleControllerTest < ActionController::TestCase
     
     assert_response :error
   end
+  
+  test "should save timing info" do
+    assert_difference("Timing.count", 2) do
+      post :choice, example_post_params
+    end        
+  end
+    
 
   def example_post_params
     {

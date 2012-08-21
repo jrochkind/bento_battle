@@ -46,6 +46,9 @@ class BattleController < ApplicationController
     session[:status_choice] = selection.demographic_status  = params[:status]
 
     selection.save!
+
+    Timing.create(:engine => params[:option_a], :miliseconds => params[:timing_a])
+    Timing.create(:engine => params[:option_b], :miliseconds => params[:timing_b])
     
     redirect_to root_path, :flash => {:submitted => true}
   end
