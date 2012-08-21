@@ -11,6 +11,14 @@ class BattleControllerTest < ActionController::TestCase
     BentoSearch.register_engine("CC") do |conf|
       conf.engine = "BentoSearch::MockEngine"
     end
+    BentoSearch.register_engine("error") do |conf|
+      conf.engine = "BentoSearch::MockEngine"
+      conf.error = {:message => "Fake error"}
+    end
+    BentoSearch.register_engine("error2") do |conf|
+      conf.engine = "BentoSearch::MockEngine"
+      conf.error = {:message => "Fake error"}
+    end
       
     BattleController.contenders = ["AA", "BB", "CC"]
   end
@@ -49,11 +57,7 @@ class BattleControllerTest < ActionController::TestCase
     end
   end
   
-  test "should recover from errors when searching" do
-    BentoSearch.register_engine("error") do |conf|
-      conf.engine = "BentoSearch::MockEngine"
-      conf.error = {:message => "Fake error"}
-    end
+  test "should recover from errors when searching" do    
     BattleController.contenders = ["AA", "BB", "CC", "error"]
     
     # Fake it into 'randomly' picking error in it's first two please
@@ -89,14 +93,6 @@ class BattleControllerTest < ActionController::TestCase
   end
   
   test "should recover from multiple errors when searching" do
-    BentoSearch.register_engine("error") do |conf|
-      conf.engine = "BentoSearch::MockEngine"
-      conf.error = {:message => "Fake error"}
-    end
-    BentoSearch.register_engine("error2") do |conf|
-      conf.engine = "BentoSearch::MockEngine"
-      conf.error = {:message => "Fake error"}
-    end
     BattleController.contenders = ["AA", "BB", "error2", "error", "CC"]
     
     # Fake it into 'randomly' picking error in it's first two please
@@ -117,9 +113,24 @@ class BattleControllerTest < ActionController::TestCase
     assert_equal "BB", assigns["two"]
     
     # and neither are errors
-    assert ! assigns["results"].values.find {|r| r.failed?}
-    
+    assert ! assigns["results"].values.find {|r| r.failed?}    
   end
+  
+  test "too many errors to display results" do
+    BattleController.contenders = ["error2", "error", "CC"]
+    
+    assert_difference("Error.count", 2) do
+      get :index, :q => "Cancer"
+    end
+    
+    assert_response :error    
+    
+    assert ! assigns["one"]
+    assert ! assigns["two"]
+    assert ! assigns["results"]
+  end
+  
+    
   
   test "choice" do
     option_a = ["a", "b", "c"].sample

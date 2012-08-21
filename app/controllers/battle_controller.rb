@@ -28,8 +28,13 @@ class BattleController < ApplicationController
         if @results[engine].failed?
           handle_failed_results(choice)
         end
-      end      
-    end    
+      end            
+    end  
+  rescue OutOfEngines
+      @results = nil
+      @one = nil
+      @two = nil
+      render :status => 500, :text => "Sorry, a searching error occured and we could not get results for you."
   end
   
   
@@ -101,6 +106,13 @@ class BattleController < ApplicationController
     @results.delete orig_engine
     
     new_engine = choices.pop
+    
+    # If we're out of choices, bail! render failure and we're done.
+    if new_engine.nil?
+      raise OutOfEngines
+    end
+    
+    
     instance_variable_set("@#{choice}", new_engine)
     
     new_results = BentoSearch.get_engine(new_engine).search(params[:q])
@@ -111,6 +123,11 @@ class BattleController < ApplicationController
     if new_results.failed?
       handle_failed_results(choice)
     end    
+  end
+  
+  # raised when all the engines failed in searching and
+  # there's no more to try. 
+  class OutOfEngines < Exception
   end
   
 end
