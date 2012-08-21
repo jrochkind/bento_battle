@@ -47,13 +47,26 @@ class BattleControllerTest < ActionController::TestCase
   test "should save timing info" do
     assert_difference("Timing.count", 2) do
       post :choice, example_post_params
-    end        
+    end      
+    
+    last_two = Timing.last(2)
+    
+    assert( last_two.find do |t| 
+      t.engine == example_post_params[:option_a] && 
+        t.miliseconds == example_post_params[:timing_a]
+    end, "timing_a recorded")
+    assert( last_two.find do |t| 
+      t.engine == example_post_params[:option_b] &&
+      t.miliseconds == example_post_params[:timing_b]
+    end, "timing_b recorded")
   end
+  
+  
     
 
   def example_post_params
     {
-      :option_a => "A", :option_b => "B", :preferA => "submit", :query => "foo", :school => "Some School", :status => "Undergraduate", 
+      :option_a => "one", :option_b => "two", :preferA => "submit", :query => "foo", :school => "Some School", :status => "Undergraduate", 
       :timing_a => 1000,
       :timing_b => 2000
      }
