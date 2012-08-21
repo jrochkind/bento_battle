@@ -1,10 +1,10 @@
 require 'test_helper'
 
 class BattleControllerTest < ActionController::TestCase
-  #test "should get index" do
-  #  get :index
-  #  assert_response :success
-  #end
+  test "should get index" do
+    get :index
+    assert_response :success
+  end
   
   test "choice" do
     option_a = ["a", "b", "c"].sample
@@ -60,7 +60,6 @@ class BattleControllerTest < ActionController::TestCase
       t.miliseconds == example_post_params[:timing_b]
     end, "timing_b recorded")
   end
-  
   
     
 
