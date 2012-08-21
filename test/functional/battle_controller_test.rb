@@ -11,7 +11,7 @@ class BattleControllerTest < ActionController::TestCase
     option_b = ["1", "2", "3"].sample    
     
     assert_difference("Selection.count", 1) do
-      post :choice, :option_a => option_a, :option_b => option_b, :preferA => "submit", :query => "foo"      
+      post :choice, example_post_params.merge(:option_a => option_a, :option_b => option_b)      
     end
     
     assert_redirected_to root_path
@@ -27,7 +27,7 @@ class BattleControllerTest < ActionController::TestCase
   
   test "demographics saved on choice" do
     assert_difference("Selection.count", 1) do
-      post :choice, :option_a => "A", :option_b => "B", :preferA => "submit", :query => "foo", :school => "Some School", :status => "Undergraduate"
+      post :choice, example_post_params
     end
     
     last = Selection.order("created_at DESC").first
@@ -44,8 +44,12 @@ class BattleControllerTest < ActionController::TestCase
     assert_response :error
   end
 
-  def choice_params
-    
+  def example_post_params
+    {
+      :option_a => "A", :option_b => "B", :preferA => "submit", :query => "foo", :school => "Some School", :status => "Undergraduate", 
+      :timing_a => 1000,
+      :timing_b => 2000
+     }
   end
   
 end

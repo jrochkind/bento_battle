@@ -55,7 +55,8 @@ class BattleController < ApplicationController
   def validate_choice
     unless (params[:option_a].present? && params[:option_b].present? &&
       params[:query].present? &&
-      (params['preferB'].present? || params['preferA'].present? || params['preferNone'].present?))
+      (params['preferB'].present? || params['preferA'].present? || params['preferNone'].present?)  &&
+      params[:timing_a].present? && params[:timing_b].present?)
     
       render :status => 500, :text => "ERROR: missing input. Something is wrong, your choice was not recorded."
     
