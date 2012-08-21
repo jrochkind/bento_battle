@@ -1,6 +1,26 @@
 require 'test_helper'
 
 class BattleControllerTest < ActionController::TestCase
+  def setup
+    BentoSearch.register_engine("one") do |conf|
+      conf.engine = "BentoSearch::MockEngine"
+    end
+    BentoSearch.register_engine("two") do |conf|
+      conf.engine = "BentoSearch::MockEngine"
+    end
+    BentoSearch.register_engine("three") do |conf|
+      conf.engine = "BentoSearch::MockEngine"
+    end
+      
+    BattleController.contenders = ["one", "two", "three"]
+  end
+  
+  def teardown
+    BattleController.contenders = nil
+    BentoSearch.reset_engine_registrations!
+  end
+  
+  
   test "should get index" do
     get :index
     
