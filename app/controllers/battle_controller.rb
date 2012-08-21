@@ -1,5 +1,13 @@
 class BattleController < ApplicationController
-  @@contenders = $battle_engines # defined in initializer with engines
+  
+  def self.contenders    
+    @@contenders ||= $battle_engines # defined in initializer with engines    
+  end
+  
+  # settable mainly for testing purposes, ordinaril
+  def self.contenders=(arr)
+    @@contenders = arr
+  end
   
   before_filter :validate_choice, :only => :choice
   
