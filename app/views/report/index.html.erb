@@ -1,5 +1,5 @@
 <h1> Results </h1>
-
+<p>Total selections made: <%= @total_selections %>
 <h2>Overall</h2>
 <table class="table table-striped">
   <tr>
@@ -18,7 +18,7 @@
     <td><%= row["wins"] %> </td>
     <td><%= row["losses"] %> </td>
     <td><%= row["ties"] %> </td>
-    <td> <%= number_to_percentage( 100 * row["wins"].to_f / ( row["wins"] + row["losses"] ), :precision => 1 )%> </td>
+    <td> <%= number_to_percentage( victory_rate(row), :precision => 0 )%> </td>
   </tr>
 <% end %>
 
@@ -69,3 +69,38 @@
   <% end %>
   
 </table>
+
+<h2>Timings (miliseconds)</h2>
+<p>Total number of searches done. (More than number of choices above, because
+searches can be done and abandoned): <%= @timings.values.collect {|d| d["count"]}.inject(0, :+) %>
+</p>
+<table class="table table-striped">
+  <tr>  
+    <th>engine</th>
+    <th>count</th>
+    <th>mean</th>
+    <th>median</th>
+    <th>90th percentile</th>
+    <th>max</th>
+  </tr>
+  
+  <% @timings.each_pair do |engine, data| %>
+  <tr>
+    <td><%= engine %></td>
+    <td><%= data["count"] %></td>
+    <td><%= "%.0f" % data["mean"]  %></td>
+    <td><%= data["median"] %></td>
+    <td><%= data["percentile90"] %></td>
+    <td><%= data["max"] %></td>
+  </tr>
+  <% end %>
+</table>
+
+<h2>Error Count</h2>
+<table class="table table-striped">
+  <tr><th>engine</th><th>num failed fetches</th></tr>
+  <% @errors.each_pair do |engine, count| %>
+    <tr><td><%= engine %></td><td><%= count %></td>
+  <% end %>
+</table>
+
