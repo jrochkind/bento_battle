@@ -14,17 +14,25 @@ class BattleController < ApplicationController
   before_filter :validate_choice, :only => :choice
   
   def index
-    if params[:q]
-      choices = contenders.shuffle
-      
+    if params[:q]            
       @one = choices.pop
       @two = choices.pop
       
       searcher = BentoSearch::MultiSearcher.new(@one, @two)      
 
-      @results = searcher.start(params[:q]).results                
+      @results = searcher.start(params[:q]).results 
+      
+      # check for failed searches and handle
+      ["one", "two"].each do |choice|
+        engine = instance_variable_get("@#{choice}")        
+        if @results[engine].failed?
+          handle_failed_results(choice)
+        end
+      end      
     end    
   end
+  
+  
   
   def choice    
     choice = if params["preferA"].present?
@@ -57,6 +65,12 @@ class BattleController < ApplicationController
   
   protected
   
+  # in seperate method mainly so we can mock it in tests to choose
+  # exactly what engines we want. 
+  def choices
+    @choices ||= contenders.shuffle
+  end
+  
   def validate_choice
     unless (params[:option_a].present? && params[:option_b].present? &&
       params[:query].present? &&
@@ -66,6 +80,32 @@ class BattleController < ApplicationController
       render :status => 500, :text => "ERROR: missing input. Something is wrong, your choice was not recorded."
     
     end
+  end
+  
+  # arg 'choice' is 'one' or 'two', and is a search engine results
+  # that failed. We'll try to replace it with results from next in
+  # list, and register it's failure. Check again and recursively
+  # handle error again if needed. 
+  def handle_failed_results(choice)
+    orig_engine = instance_variable_get("@#{choice}")
+    orig_results = @results[orig_engine]
+    
+    # record the error
+    Error.create(
+      :engine => orig_engine, 
+      :error_info => orig_results.error.to_hash,
+      :backtrace => orig_results.error[:exception].try(:backtrace) 
+     )
+    
+    
+    @results.delete orig_engine
+    
+    new_engine = choices.pop
+    instance_variable_set("@#{choice}", new_engine)
+    
+    new_results = BentoSearch.get_engine(new_engine).search(params[:q])
+    
+    @results[new_engine] = new_results    
   end
   
 end

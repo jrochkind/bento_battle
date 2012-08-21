@@ -2,17 +2,17 @@ require 'test_helper'
 
 class BattleControllerTest < ActionController::TestCase
   def setup
-    BentoSearch.register_engine("one") do |conf|
+    BentoSearch.register_engine("AA") do |conf|
       conf.engine = "BentoSearch::MockEngine"
     end
-    BentoSearch.register_engine("two") do |conf|
+    BentoSearch.register_engine("BB") do |conf|
       conf.engine = "BentoSearch::MockEngine"
     end
-    BentoSearch.register_engine("three") do |conf|
+    BentoSearch.register_engine("CC") do |conf|
       conf.engine = "BentoSearch::MockEngine"
     end
       
-    BattleController.contenders = ["one", "two", "three"]
+    BattleController.contenders = ["AA", "BB", "CC"]
   end
   
   def teardown
@@ -47,6 +47,45 @@ class BattleControllerTest < ActionController::TestCase
     results.values.each do |v|
       assert_kind_of BentoSearch::Results, v, "each results value is a BentoSearch::Results"
     end
+  end
+  
+  test "should recover from errors when searching" do
+    BentoSearch.register_engine("error") do |conf|
+      conf.engine = "BentoSearch::MockEngine"
+      conf.error = {:message => "Fake error"}
+    end
+    BattleController.contenders = ["AA", "BB", "CC", "error"]
+    
+    # Fake it into 'randomly' picking error in it's first two please
+    @controller.extend( Module.new do      
+      # chooses from the end, so put error at the end
+      def choices
+        @choices ||= ["AA", "BB", "error", "CC"]
+      end
+    end)
+    
+    assert_difference("Error.count", 1) do
+      get :index, :q => "Cancer"
+    end
+    
+    assert_response :success  
+    
+    # proper error was saved
+    err = Error.last
+    assert_equal "error", err.engine
+
+    
+    # didn't use error, replaced it with next in list, BB
+    assert_equal "CC", assigns["one"]
+    assert_equal "BB", assigns["two"]
+    
+    # and in results
+    assert_include assigns["results"].keys, "CC"
+    assert_include assigns["results"].keys, "BB"
+    
+    # and neither are errors
+    assert ! assigns["results"].values.find {|r| r.failed?}
+    
   end
   
   test "choice" do
