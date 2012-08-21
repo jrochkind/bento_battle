@@ -1,4 +1,8 @@
 BentoBattle::Application.routes.draw do
+  # actually need this first one to make rails functional test happy,
+  # root will be used instead for real. 
+  match 'battle' => "battle#index", :via => "get"
+  
   root :to => "battle#index", :method => :get
   
   match 'choice' => 'battle#choice', :via => "post", :as => :choice

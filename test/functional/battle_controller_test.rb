@@ -3,7 +3,30 @@ require 'test_helper'
 class BattleControllerTest < ActionController::TestCase
   test "should get index" do
     get :index
-    assert_response :success
+    
+    assert_response :success   
+    
+    assert ! assigns["results"]
+  end
+  
+  test "should get index with results" do
+    get :index, :q => "Cancer"
+    
+    assert_response :success  
+    
+    assert      assigns["one"], "assigns @one"
+    assert      assigns["two"], "assigns @two"
+    
+    results     = assigns["results"]
+    
+    assert      results, "assigns @results"
+            
+    assert_kind_of Hash, results
+    assert_equal 2, results.size, "@results has two values"
+    
+    results.values.each do |v|
+      assert_kind_of BentoSearch::Results, v, "each results value is a BentoSearch::Results"
+    end
   end
   
   test "choice" do

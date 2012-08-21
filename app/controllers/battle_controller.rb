@@ -1,10 +1,12 @@
 class BattleController < ApplicationController
   
-  def self.contenders    
+  def self.contenders       
     @@contenders ||= $battle_engines # defined in initializer with engines    
   end
+  def contenders ; self.class.contenders ; end
   
-  # settable mainly for testing purposes, ordinaril
+  # settable mainly for testing purposes, ordinarily will be lazily
+  # loaded from $battle_engines global. 
   def self.contenders=(arr)
     @@contenders = arr
   end
@@ -13,14 +15,14 @@ class BattleController < ApplicationController
   
   def index
     if params[:q]
-      choices = @@contenders.shuffle
+      choices = contenders.shuffle
       
       @one = choices.pop
       @two = choices.pop
       
       searcher = BentoSearch::MultiSearcher.new(@one, @two)      
 
-      @results = searcher.start(params[:q]).results            
+      @results = searcher.start(params[:q]).results                
     end    
   end
   
