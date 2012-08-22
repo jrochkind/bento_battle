@@ -6,7 +6,7 @@ gem 'rails', '3.2.6'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
-gem 'bento_search', :path => "../bento_search"
+gem 'bento_search', :git => "git://github.com/jrochkind/bento_search.git"
 gem "celluloid"
 
 
