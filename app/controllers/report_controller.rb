@@ -18,7 +18,11 @@ class ReportController < ApplicationController
   # calc the 'victory rate': wins / (wins + losses), disregarding ties,
   # expressed as a percentage
   def victory_rate(row)
-    100 * row["wins"].to_f / ( row["wins"] + row["losses"] ) 
+    if rows["wins"].to_i == 0
+      0
+    else
+      100 * row["wins"].to_f / ( row["wins"] + row["losses"] )
+    end
   end
   helper_method :victory_rate
   
