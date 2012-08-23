@@ -47,7 +47,7 @@ class ReportController < ApplicationController
                (case when option_a = choice then 1 else 0 end) as win, 
                (case when choice is NULL then 1 else 0 end) as tie, 
                (case when option_b = choice then 1 else 0 end) AS loss 
-        FROM selections
+        FROM selections as opt_as
   
         UNION ALL
   
@@ -55,7 +55,7 @@ class ReportController < ApplicationController
               (case when option_b = choice then 1 else 0 end) as win, 
               (case when choice is NULL then 1 else 0 end) as tie, 
               (case when option_a = choice then 1 else 0 end) AS loss
-        FROM selections 
+        FROM selections as opt_bs
   
      )
   
