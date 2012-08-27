@@ -10,10 +10,13 @@ BentoSearch.register_engine("scopus") do |conf|
   conf.engine = "BentoSearch::ScopusEngine"
   conf.api_key = ENV["SCOPUS_KEY"]
   
-  conf.item_decorators = [ 
-    BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
-    BentoSearch::OpenurlAddOtherLink[:base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
-  ]  
+  # No links for our test
+  conf.item_decorators = [ BentoSearch::NoLinks ]
+  
+  #conf.item_decorators = [ 
+  #  BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
+  #  BentoSearch::OpenurlAddOtherLink[:base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
+  #]  
 end
 
 BentoSearch.register_engine("summon") do |conf|
@@ -34,14 +37,14 @@ BentoSearch.register_engine("summon") do |conf|
     "s.role" => "authenticated"
   } 
   
-  # Barnaby, for your purposes you probably do NOT wnat the conf.item_decorators,
-  # just use the built-in Summon link. Or you could use the AddOtherLink one to
-  # add a link to your link resolver, but leave the MainLink one off, to just
-  # use Summon's ordinary link on title for main link. 
-  conf.item_decorators = [ 
-    BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
-    BentoSearch::OpenurlAddOtherLink[:base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
-  ]  
+  
+  # No links for our test
+  conf.item_decorators = [ BentoSearch::NoLinks ]
+
+  #conf.item_decorators = [ 
+  #  BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
+  #  BentoSearch::OpenurlAddOtherLink[:base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
+  #]  
 
 end
 
@@ -58,10 +61,13 @@ BentoSearch.register_engine("ebscohost") do |conf|
   #conf.databases          = %w{a9h awn 
   #ofm eft gft bft asf aft ijh hft air flh geh ssf hgh rih cja 22h 20h fmh rph jph}
   
-  conf.item_decorators = [ 
-    BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
-    BentoSearch::OpenurlAddOtherLink[:base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
-  ]  
+  # No links for our test
+  conf.item_decorators = [ BentoSearch::NoLinks ]
+
+  #conf.item_decorators = [ 
+  #  BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
+  #  BentoSearch::OpenurlAddOtherLink[:base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
+  #]  
 end
 
 #BentoSearch.register_engine("eds_old_api") do |conf|
@@ -83,11 +89,14 @@ BentoSearch.register_engine("eds") do |conf|
   # users, we can just tell the engine to assume end user auth. 
   conf.auth = true
   
-  conf.item_decorators = [ 
-    BentoSearch::OnlyPremadeOpenurl, 
-    BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
-    BentoSearch::OpenurlAddOtherLink[:overwrite => true, :base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
-  ]    
+  # No links for our test
+  conf.item_decorators = [ BentoSearch::NoLinks ]
+  
+  #conf.item_decorators = [ 
+  #  BentoSearch::OnlyPremadeOpenurl, 
+  #  BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
+  #  BentoSearch::OpenurlAddOtherLink[:overwrite => true, :base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
+  #]    
   
   # http://support.ebsco.com/knowledge_base/detail.php?id=5382
   conf.only_source_types = [
@@ -122,10 +131,13 @@ BentoSearch.register_engine("primo") do |conf|
     "query_exc" => "facet_pfilter,exact,books,newspaper_articles,websites,reference_entrys,images,media,audio_video,rare_books,book_chapters"
   }
   
-  conf.item_decorators = [ 
-    BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
-    BentoSearch::OpenurlAddOtherLink[:base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
-  ]  
+  # No links for our test
+  conf.item_decorators = [ BentoSearch::NoLinks ]
+
+  #conf.item_decorators = [ 
+  #  BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
+  #  BentoSearch::OpenurlAddOtherLink[:base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
+  #]  
 end
 
   
