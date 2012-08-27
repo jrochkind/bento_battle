@@ -57,7 +57,7 @@ class ReportController < ApplicationController
               (case when option_a = choice then 1 else 0 end) AS loss
         FROM selections as opt_bs
   
-     )
+     ) as collated
   
      GROUP BY engine
    EOS
