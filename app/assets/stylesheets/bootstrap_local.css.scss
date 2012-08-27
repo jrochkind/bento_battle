@@ -37,3 +37,10 @@ th small {
   color: #999;
   font-size: 80%;
 }
+
+/* since the item title isn't a link anymore, let's give it
+   it's own color anyway, non-black aids legibility */
+   
+.bento_item_title {
+  color: $green;
+}
