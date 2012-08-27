@@ -44,3 +44,24 @@ th small {
 .bento_item_title {
   color: $green;
 }
+
+/* little inverted color thing */
+
+body.battle {
+  background-color: whiteSmoke;
+}
+
+body.battle .well {
+  background-color: white;
+}
+
+body.battle .well.alert-info {
+  background-color: $infoBackground;
+  border-color: $infoBorder;
+  color: $infoText;
+}
+
+body.battle .well.alert-info .bento_item_title {
+  color: $infoText;
+}
+  
