@@ -36,14 +36,21 @@ $ebsco_dbs = []
     $ebsco_dbs.push( 'asf' )  # Applied Science & Technology Full Text (H.W. Wilson) **  
     $ebsco_dbs.push( 'hsr' )  # Humanities & Social Sciences Index Retrospective: 1907-1984 (H.W. Wilson) ** 
     $ebsco_dbs.push( 'rgr' )  # Readers' Guide Retrospective: 1890-1982 (H.W. Wilson) ** 
-    $ebsco_dbs.push( 'eft' )  # Education Full Text (H.W. Wilson) ** 
+
+    # for reasons we don't know, we lost access to Ed Full Text. 
+    # 4 Sep 2012 jrochkind
+    #$ebsco_dbs.push( 'eft' )  # Education Full Text (H.W. Wilson) ** 
     $ebsco_dbs.push( 'air' )  # Art Index Retrospective (H.W. Wilson) ** 
     $ebsco_dbs.push( 'aft' )  # Art Full Text (H.W. Wilson) ** 
     $ebsco_dbs.push( 'ofm' )  # OmniFile Full Text Mega (H.W. Wilson) ** 
-    $ebsco_dbs.push( 'rgm' )  # Readers' Guide Full Text Mega (H.W. Wilson)  
-    $ebsco_dbs.push( 'ssf' )  # Social Sciences Full Text (H.W. Wilson) ** 
-    $ebsco_dbs.push( 'hft' )  # Humanities Full Text (H.W. Wilson) ** 
-    $ebsco_dbs.push( 'gft' )  # General Science Full Text (H.W. Wilson) ** 
-    $ebsco_dbs.push( 'bft' )  # Business Abstracts with Full Text (H.W. Wilson) ** 
+    
+    # for reasons we don't know, we lost access to Reader's Guide and
+    # Social Sciences Full Text
+    # 4 Sep 2012
+    #$ebsco_dbs.push( 'rgm' )  # Readers' Guide Full Text Mega (H.W. Wilson)  
+    #$ebsco_dbs.push( 'ssf' )  # Social Sciences Full Text (H.W. Wilson) ** 
+    #$ebsco_dbs.push( 'hft' )  # Humanities Full Text (H.W. Wilson) ** 
+    #$ebsco_dbs.push( 'gft' )  # General Science Full Text (H.W. Wilson) ** 
+    #$ebsco_dbs.push( 'bft' )  # Business Abstracts with Full Text (H.W. Wilson) ** 
 
 
