@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/jrochkind/bento_search.git
-  revision: 34157655be2883f22eb175167fe8654ba8a14be1
+  revision: f4f00a0c77b433e5221c13db96b7036f8ae0114f
   specs:
     bento_search (0.5.0)
       confstruct (>= 0.2.3, < 1.0)
@@ -68,7 +68,7 @@ GEM
       multi_json (~> 1.0)
     hike (1.2.1)
     httpclient (2.2.7)
-    i18n (0.6.0)
+    i18n (0.6.1)
     journey (1.0.4)
     jquery-rails (2.1.1)
       railties (>= 3.1.0, < 5.0)
