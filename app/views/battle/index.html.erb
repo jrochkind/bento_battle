@@ -13,8 +13,9 @@
     Your participation is entirely optional, you will neither be penalized nor
     rewarded for your choice of whether or not to participate. All responses are anonymous. 
     Results may be shared as research findings.</p>
+    
     <div class="page-header">
-      <h1>Help us evaluate article search products
+      <h1>1. Help us evaluate article search products
         <small>by searching for a topic, an article, or anything.</small>
       </h1>
     </div>
@@ -42,20 +43,23 @@
   <%= hidden_field_tag 'option_b', @two %>
   
   <div class="row">
-    <div class="span12">
-    <div class="choice-header">
-        <h2>Which set of results do you prefer <small>as most useful or helpful . </small></h2>
-    </div>
-    </div>
-  </div>
-  
-  <div class="row">
     <div class="span12 demographics">
-      <em>Optional, let us know your:  </em>
+      <h2 class="demographic">2. Optional, tell us about yourself</h2>
       School/Institution: <%= select_tag("school", options_for_select($schools, session[:school_choice])) %> 
       Status:             <%= select_tag("status", options_for_select($statuses, session[:status_choice])) %>
     </div>
   </div>
+  
+  <div class="row">
+    <div class="span12">
+    <div class="choice-header">
+        <h2>3. Which set of results do you prefer <small>as most useful or helpful . </small></h2>
+        <p>There are two different lists of results, on the left and right. Which better meets your needs?</p>
+    </div>
+    </div>
+  </div>
+  
+  
   
   <div class="row">    
     <div class="span4 battle-option">
