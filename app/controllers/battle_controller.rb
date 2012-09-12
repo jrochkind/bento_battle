@@ -95,11 +95,13 @@ class BattleController < ApplicationController
     orig_engine = instance_variable_get("@#{choice}")
     orig_results = @results[orig_engine]
     
+    
     # record the error
     Error.create(
       :engine => orig_engine, 
       :error_info => orig_results.error.to_hash,
-      :backtrace => orig_results.error[:exception].try(:backtrace) 
+      :backtrace => orig_results.error[:exception].try(:backtrace),
+      :query => params[:q]
      )
     
     

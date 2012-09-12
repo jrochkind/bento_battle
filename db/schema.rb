@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120801211921) do
+ActiveRecord::Schema.define(:version => 20120912211133) do
 
   create_table "errors", :force => true do |t|
     t.string   "engine"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20120801211921) do
     t.text     "error_info"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "query"
   end
 
   create_table "selections", :force => true do |t|

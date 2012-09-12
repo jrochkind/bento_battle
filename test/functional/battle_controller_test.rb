@@ -81,6 +81,7 @@ class BattleControllerTest < ActionController::TestCase
     # proper error was saved
     err = Error.last
     assert_equal "error", err.engine
+    assert_equal "Cancer", err.query
 
     
     # didn't use error, replaced it with next in list, BB
