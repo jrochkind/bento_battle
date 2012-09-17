@@ -9,6 +9,7 @@
     <th>losses</th>
     <th>ties</th>
     <th>Victory rate <small>disregards ties: wins / (wins + losses)</small></th>
+    <th>z value (sig diff than 50%?)</th>
   </tr>
 
 <% @results.each do |row| %>
@@ -19,13 +20,14 @@
     <td><%= row["losses"] %> </td>
     <td><%= row["ties"] %> </td>
     <td> <%= number_to_percentage( victory_rate(row), :precision => 0 )%> </td>
+    <td> <%= "%.2f" % one_sample_z_test( victory_rate(row) / 100, row["wins"].to_i + row["losses"].to_i ) %></th>
   </tr>
 <% end %>
 
 </table>
 
-<h2> Match-up count sanity check </h2>
-<table class="table table-striped">
+<h2> Match-up cross-tab </h2>
+<table class="crosstab table table-striped">
   <tr>
     <th>vs.</th>
     <% @match_up_keys.each do |engine| %>
@@ -42,7 +44,19 @@
             <% if engine == second_engine %>
               *
             <% else %>
-              <%= @match_up_count[engine][second_engine] %>
+            <% hash = @match_up_count[engine][second_engine]
+               count = ( hash[engine] + hash[second_engine] )
+               victory_rate = hash[engine].to_f / count 
+            %>
+              <dl class="dl-horizontal">
+                <dt>total</dt><dd><%= hash["count"] %></dd>
+                <dt class="small">tie</dt><dd class="small"><%= hash["tie_count" ] %></dd>
+                <dt class="small"><%= engine %> win:</dt><dd class="small"> <%= hash[engine] %></dd>
+                <dt class="small"><%= second_engine %> win: </dt><dd class="small"> <%= hash[second_engine] %></dd>
+                <dt> <%= engine %> rate</dt><dd><%= "%.2f" % victory_rate %></dd>
+                <dt> z value </dt><dd> <%= "%.2f" % one_sample_z_test( victory_rate , count ) %></dd> 
+              </dl>
+                  
             <% end %>
           </td>
         <% end %>

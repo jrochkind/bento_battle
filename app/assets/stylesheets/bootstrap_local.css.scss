@@ -70,3 +70,18 @@ body.battle .well.alert-info .bento_item_title {
   padding: 0.33em;
   border: 1px solid #EEE;
 }
+
+/* results */
+
+dt.small, dd.small {
+  font-size: 80%;
+}
+
+.crosstab td, .crosstab th {
+  text-align: center;
+}
+
+.crosstab dt {
+  font-weight: normal;
+  color: $gray;
+}

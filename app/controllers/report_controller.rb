@@ -2,7 +2,7 @@ class ReportController < ApplicationController
   
   def index
     @results = fetch_stats
-    @match_up_keys, @match_up_count = fetch_sanity_check_grid 
+    @match_up_keys, @match_up_count = fetch_crosstab 
     @demographic_overview = fetch_demographic_overview    
     
     @timings = fetch_timing
@@ -68,18 +68,39 @@ class ReportController < ApplicationController
   # again some raw sql, a grid of how often each engine was faced
   # off against each other engine in a match that resulted in
   # a a/b/tie selection. 
-  def fetch_sanity_check_grid
-    results = Selection.connection.select_all("select option_a, option_b, count(*) as count from selections group by option_a, option_b")
+  def fetch_crosstab
+    sql = <<-EOS 
+      SELECT option_a, option_b, count(*) as count,
+        sum(case when choice=option_a then 1 else 0 end) as option_a_win,
+        sum(case when choice=option_b then 1 else 0 end) as option_b_win,
+        sum(case when choice is null then 1 else 0 end) as tie_count
+      FROM selections 
+      GROUP BY option_a, option_b
+    EOS
+    results = Selection.connection.select_all(sql)
     # we get back pairings that are A vs B in one row, and B vs A in a different one. Combine em all. 
     
     match_ups = Hash.new do |h, k|
-      h[k] = Hash.new(0)
+      h[k] = Hash.new do |h1, k1|
+        h1[k1] = Hash.new do |h2, k2|
+          h2[k2] = 0
+        end
+      end
     end
+    
 
     results.each do |row|
       normal = [row["option_a"], row["option_b"]].sort
-      match_ups[normal.first][normal.last] += row["count"]
-      match_ups[normal.last][normal.first] += row["count"]
+      
+      [ match_ups[normal.first][normal.last] , 
+        match_ups[normal.last][normal.first] ].each do |hash|
+
+          hash["count"]         += row["count"].to_i
+          hash[row["option_a"]] += row["option_a_win"].to_i
+          hash[row["option_b"]] += row["option_b_win"].to_i
+          hash["tie_count"]           += row["tie_count"].to_i
+      end      
+      
     end
     
     engines = Selection.connection.
@@ -142,5 +163,18 @@ class ReportController < ApplicationController
     Error.calculate("count", nil, :group => "engine")
   end
   
+  # http://www.statisticslectures.com/topics/onesamplezproportions/
+  # Null hypothesis is 50% preference, no difference.
+  # pass in p_hat, actually observed (win / (win + loss)), and
+  # n, (win + loss).  Returns z value. Which at alpha of 0.5, should
+  # be greater than 1.96 or less than -1.96 to show an actual non-null-hypothesis
+  # preference. 
+  def one_sample_z_test(p_hat, n, p_null = 0.5)        
+    (p_hat - p_null) / Math.sqrt( p_null * ( 1 -  p_null)  / n )    
+  end
+  helper_method :one_sample_z_test
+  
+
+      
   
 end
