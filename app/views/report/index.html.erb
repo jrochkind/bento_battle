@@ -46,15 +46,15 @@
             <% else %>
             <% hash = @match_up_count[engine][second_engine]
                count = ( hash[engine] + hash[second_engine] )
-               victory_rate = hash[engine].to_f / count 
+               second_victory_rate = hash[second_engine].to_f / count 
             %>
               <dl class="dl-horizontal">
                 <dt>total</dt><dd><%= hash["count"] %></dd>
                 <dt class="small">tie</dt><dd class="small"><%= hash["tie_count" ] %></dd>
-                <dt class="small"><%= engine %> win:</dt><dd class="small"> <%= hash[engine] %></dd>
                 <dt class="small"><%= second_engine %> win: </dt><dd class="small"> <%= hash[second_engine] %></dd>
-                <dt> <%= engine %> rate</dt><dd><%= "%.2f" % victory_rate %></dd>
-                <dt> z value </dt><dd> <%= "%.2f" % one_sample_z_test( victory_rate , count ) %></dd> 
+                <dt class="small"><%= engine %> win:</dt><dd class="small"> <%= hash[engine] %></dd>
+                <dt> <%= second_engine %> rate</dt><dd><%= "%.2f" % second_victory_rate %></dd>
+                <dt> z value </dt><dd> <%= "%.2f" % one_sample_z_test( second_victory_rate , count ) %></dd> 
               </dl>
                   
             <% end %>
