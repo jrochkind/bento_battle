@@ -1,5 +1,3 @@
-Under development, not yet ready for use.  
-
 A tool for side-by-side double blinded user testing of search engine
 result preferences. Using the [bento_search](http://github.com/jrochkind/bento_search)
 library.
