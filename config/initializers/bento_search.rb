@@ -6,17 +6,21 @@ require 'bento_search/openurl_main_link'
 # services
 $battle_engines = %w{primo eds ebscohost summon scopus}
 
+# An item decorator class that suppresses all links. 
+# Could be defined elsewhere in it's own file, but it's so
+# simple that it's straightforward to define here. 
+class NoLinkDecorator < BentoSearch::StandardDecorator
+  include BentoSearch::NoLinks
+end
+
+
+
 BentoSearch.register_engine("scopus") do |conf|
   conf.engine = "BentoSearch::ScopusEngine"
   conf.api_key = ENV["SCOPUS_KEY"]
   
   # No links for our test
-  conf.item_decorators = [ BentoSearch::NoLinks ]
-  
-  #conf.item_decorators = [ 
-  #  BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
-  #  BentoSearch::OpenurlAddOtherLink[:base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
-  #]  
+  conf.for_display = {:decorator => "NoLinkDecorator"}
 end
 
 BentoSearch.register_engine("summon") do |conf|
@@ -37,15 +41,8 @@ BentoSearch.register_engine("summon") do |conf|
     "s.role" => "authenticated"
   } 
   
-  
   # No links for our test
-  conf.item_decorators = [ BentoSearch::NoLinks ]
-
-  #conf.item_decorators = [ 
-  #  BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
-  #  BentoSearch::OpenurlAddOtherLink[:base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
-  #]  
-
+  conf.for_display = {:decorator => "NoLinkDecorator"}
 end
 
 require "#{Rails.root}/config/ebsco_dbs.rb"
@@ -62,21 +59,9 @@ BentoSearch.register_engine("ebscohost") do |conf|
   #ofm eft gft bft asf aft ijh hft air flh geh ssf hgh rih cja 22h 20h fmh rph jph}
   
   # No links for our test
-  conf.item_decorators = [ BentoSearch::NoLinks ]
-
-  #conf.item_decorators = [ 
-  #  BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
-  #  BentoSearch::OpenurlAddOtherLink[:base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
-  #]  
+  conf.for_display = {:decorator => "NoLinkDecorator"}
 end
 
-#BentoSearch.register_engine("eds_old_api") do |conf|
-#  conf.engine = "BentoSearch::EbscoHostEngine"
-  
-#  conf.profile_id =   ENV['EDS_PROFILE']
-#  conf.profile_password = ENV['EBSCOHOST_PWD']
-  
-#end
 
 BentoSearch.register_engine("eds") do |conf|
   conf.engine = "BentoSearch::EdsEngine"
@@ -90,14 +75,8 @@ BentoSearch.register_engine("eds") do |conf|
   conf.auth = true
   
   # No links for our test
-  conf.item_decorators = [ BentoSearch::NoLinks ]
-  
-  #conf.item_decorators = [ 
-  #  BentoSearch::OnlyPremadeOpenurl, 
-  #  BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
-  #  BentoSearch::OpenurlAddOtherLink[:overwrite => true, :base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
-  #]    
-  
+  conf.for_display = {:decorator => "NoLinkDecorator"}
+
   # http://support.ebsco.com/knowledge_base/detail.php?id=5382
   conf.only_source_types = [
     "Academic Journals",
@@ -132,12 +111,7 @@ BentoSearch.register_engine("primo") do |conf|
   }
   
   # No links for our test
-  conf.item_decorators = [ BentoSearch::NoLinks ]
-
-  #conf.item_decorators = [ 
-  #  BentoSearch::OpenurlMainLink[:base_url => "http://findit.library.jhu.edu/resolve", :extra_query => "&umlaut.skip_resolve_menu_for_type=fulltext"] ,
-  #  BentoSearch::OpenurlAddOtherLink[:base_url => "http://findit.library.jhu.edu/resolve", :link_name => "Find It @ JH"]    
-  #]  
+  conf.for_display = {:decorator => "NoLinkDecorator"}
 end
 
-  
+
