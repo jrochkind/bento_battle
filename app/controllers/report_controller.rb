@@ -21,7 +21,7 @@ class ReportController < ApplicationController
     if row["wins"].to_i == 0
       0
     else
-      100 * row["wins"].to_f / ( row["wins"] + row["losses"] )
+      100 * row["wins"].to_f / ( row["wins"].to_i + row["losses"].to_i )
     end
   end
   helper_method :victory_rate
